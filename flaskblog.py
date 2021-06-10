@@ -1,9 +1,12 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from datetime import datetime
+from flask import Flask, render_template, url_for, flash, redirect, send_from_directory
 from forms import LoginForm, RegistrationForm
+import os
 
-app = Flask(__name__)
-# Random string to help encrypt logins
-app.config['SECRET_KEY'] = '354407a449af675d04fe830449b9ee9b'
+# configuration variables
+APP = Flask(__name__)
+
+
 posts = [
     {
         'author': 'Sean Connors',
@@ -20,29 +23,35 @@ posts = [
 ]
 
 
-@app.route('/')
-@app.route('/home')
+@APP.route('/')
+@APP.route('/main')
 def home():
-    return render_template('home.html', posts=posts)
+    return render_template('main.html', posts=posts)
 
 
-@app.route('/about')
+@APP.route('/about')
 def about():
     return render_template('about.html', title='About')
 
 # Enable this route to accept GET and POST requests, important for
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@APP.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(APP.root_path, 'static'),
+                               'favicon.ico')
+
+
+@APP.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
+        flash(f"Account created for {form.username.data}!", 'success')
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@APP.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -55,4 +64,4 @@ def login():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    APP.run(debug=True)

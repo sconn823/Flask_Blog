@@ -6,7 +6,7 @@ export FLASK_DEBUG=1
 flask run
 
 Tutorial used to build code:
-https://youtu.be/UIJKdCIEXUQ?t=1759
+https://www.youtube.com/watch?v=cYWiDiIUxQc&t=260s
 
 TODO: Fix error with bracketcs in layout.html
 
